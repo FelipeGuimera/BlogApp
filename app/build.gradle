@@ -49,8 +49,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
 
     //Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.3")
 
     // ViewModel y LiveData KTX
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")

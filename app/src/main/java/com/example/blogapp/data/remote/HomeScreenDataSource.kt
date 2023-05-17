@@ -1,9 +1,8 @@
-package com.example.blogapp.data.resource
+package com.example.blogapp.data.remote
 
 import com.example.blogapp.core.Resource
 import com.example.blogapp.data.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 class HomeScreenDataSource {

@@ -1,6 +1,8 @@
 package com.example.blogapp.ui.auth
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.blogapp.R
 import com.example.blogapp.data.remote.auth.AuthDataSource
 import com.example.blogapp.databinding.FragmentSetupProfileBinding
@@ -43,7 +46,7 @@ class SetupProfileFragment : Fragment(R.layout.fragment_setup_profile) {
             } catch (e: ActivityNotFoundException) {
                 Toast.makeText(
                     requireContext(),
-                    "No se encuentra app para abrir la camara  ",
+                    "No se encontro app para abir la camara",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -51,32 +54,38 @@ class SetupProfileFragment : Fragment(R.layout.fragment_setup_profile) {
 
         binding.btnCreateProfile.setOnClickListener {
             val username = binding.txtUsername.text.toString().trim()
+            val alertDialog =
+                AlertDialog.Builder(requireContext()).setTitle("Uploading photo...").create()
             bitmap?.let {
                 if (username.isNotEmpty()) {
                     viewModel.updateUserProfile(imageBitmap = it, username = username)
-                        .observe(viewLifecycleOwner, { result ->
+                        .observe(viewLifecycleOwner) { result ->
                             when (result) {
-                                is com.example.blogapp.core.Result.Loading -> {}
-                                is com.example.blogapp.core.Result.Success -> {}
-                                is com.example.blogapp.core.Result.Failure -> {}
+                                is com.example.blogapp.core.Result.Loading -> {
+                                    alertDialog.show()
+                                }
+                                is com.example.blogapp.core.Result.Success -> {
+                                    alertDialog.dismiss()
+                                    findNavController().navigate(R.id.action_setupProfileFragment_to_homeScreenFragment)
+                                }
+                                is com.example.blogapp.core.Result.Failure -> {
+                                    alertDialog.dismiss()
+                                }
                             }
-                        })
+                        }
                 }
             }
         }
+
     }
 
-    private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                val imageBitmap = data?.extras?.get("data") as Bitmap
-                binding.profileImage.setImageBitmap(imageBitmap)
-                bitmap = imageBitmap
-            } else {
-                // El usuario canceló la captura de imagen o ocurrió un error
-            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            binding.profileImage.setImageBitmap(imageBitmap)
+            bitmap = imageBitmap
         }
+    }
 
 }
 

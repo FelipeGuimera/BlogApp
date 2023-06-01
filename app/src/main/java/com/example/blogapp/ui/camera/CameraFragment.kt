@@ -17,6 +17,7 @@ import com.example.blogapp.databinding.FragmentCameraBinding
 class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     private val REQUEST_IMAGE_CAPTURE = 1
+    private var bitmap: Bitmap? = null
     private lateinit var binding: FragmentCameraBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

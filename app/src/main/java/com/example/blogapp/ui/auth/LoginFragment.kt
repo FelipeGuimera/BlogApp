@@ -39,8 +39,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun isUserLoggedIn() {
-        firebaseAuth.currentUser?.let {
-            findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+        firebaseAuth.currentUser?.let { user ->
+            if(user.displayName.isNullOrEmpty()) {
+                findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
+            }else{
+                findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+            }
         }
     }
 
@@ -81,8 +85,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun signIn(email: String, password: String) {
-        viewModel.signIn(email, password).observe(viewLifecycleOwner, Observer { result ->
+    private fun signIn(email: String, password: String){
+        viewModel.signIn(email,password).observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -90,11 +94,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
                 is Result.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+                    Toast.makeText(
+                        requireContext(),
+                        "Welcome ${result.data?.email}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    if(result.data?.displayName.isNullOrEmpty()) {
+                        findNavController().navigate(R.id.action_loginFragment_to_setupProfileFragment)
+                    }else{
+                        findNavController().navigate(R.id.action_loginFragment_to_homeScreenFragment)
+                    }
                 }
                 is Result.Failure -> {
-                    binding.progressBar.visibility = View.GONE
                     binding.btnSignin.isEnabled = true
+                    binding.progressBar.visibility = View.GONE
                     Toast.makeText(
                         requireContext(),
                         "Error: ${result.exception}",
@@ -104,5 +117,4 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         })
     }
-
 }

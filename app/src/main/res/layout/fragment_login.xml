@@ -55,7 +55,12 @@
         android:id="@+id/btn_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrarse"/>
+        android:text="Registrarse"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:shadowColor="@color/black"
+        />
+
 
     <ProgressBar
         android:id="@+id/progress_bar"

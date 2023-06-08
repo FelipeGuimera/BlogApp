@@ -11,7 +11,8 @@ import com.example.blogapp.core.TimeUtils
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.databinding.PostItemViewBinding
 
-class HomeScreenAdapter(private val postList: List<Post>): RecyclerView.Adapter<BaseViewHolder<*>>() {
+class HomeScreenAdapter(private val postList: List<Post>) :
+    RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         val itemBinding =
@@ -33,19 +34,34 @@ class HomeScreenAdapter(private val postList: List<Post>): RecyclerView.Adapter<
         val context: Context
     ) : BaseViewHolder<Post>(binding.root) {
         override fun bind(item: Post) {
-            Glide.with(context).load(item.post_image).centerCrop().into(binding.postImage)
-            Glide.with(context).load(item.profile_picture).centerCrop().into(binding.profilePicture)
-            binding.profileName.text = item.profile_name
-            if (item.post_description.isEmpty()) {
-                binding.postDescription.visibility = View.GONE
-            } else {
-                binding.postDescription.text = item.post_description
-            }
+            setupProfileInfo(item)
+            addPostTimeStamp(item)
+            setupPostImage(item)
+            setupPostDescription(item)
+        }
 
-            val createdAt = (item.created_at?.time?.div(1000L))?.let {
+        private fun setupProfileInfo(post: Post) {
+            Glide.with(context).load(post.profile_picture).centerCrop().into(binding.profilePicture)
+            binding.profileName.text = post.profile_name
+        }
+
+        private fun addPostTimeStamp(post: Post) {
+            val createdAt = (post.created_at?.time?.div(1000L))?.let {
                 TimeUtils.getTimeAgo(it.toInt())
             }
             binding.postTimestamp.text = createdAt
+        }
+
+        private fun setupPostImage(post: Post) {
+            Glide.with(context).load(post.post_image).centerCrop().into(binding.postImage)
+        }
+
+        private fun setupPostDescription(post: Post) {
+            if (post.post_description.isEmpty()) {
+                binding.postDescription.visibility = View.GONE
+            } else {
+                binding.postDescription.text = post.post_description
+            }
         }
 
     }

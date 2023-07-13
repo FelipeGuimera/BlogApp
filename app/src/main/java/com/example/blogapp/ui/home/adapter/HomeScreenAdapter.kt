@@ -110,7 +110,7 @@ class HomeScreenAdapter(
 
         private fun setLikeClickAction(post: Post) {
             binding.likeBtn.setOnClickListener {
-                if (post.liked) post.apply { liked = false } else post.apply { liked = true }
+                if(post.liked) post.apply { liked = false } else post.apply { liked = true }
                 tintHeartIcon(post)
                 postClickListener?.onLikeButtonClick(post, post.liked)
             }

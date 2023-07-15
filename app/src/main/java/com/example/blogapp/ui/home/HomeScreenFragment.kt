@@ -20,6 +20,7 @@ import com.example.blogapp.ui.home.adapter.HomeScreenAdapter
 import com.example.blogapp.ui.home.adapter.OnPostClickListener
 
 
+
 class HomeScreenFragment : Fragment(R.layout.fragment_home_screen), OnPostClickListener {
 
         private lateinit var binding: FragmentHomeScreenBinding

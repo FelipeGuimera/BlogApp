@@ -13,10 +13,8 @@ import com.example.blogapp.core.TimeUtils
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.databinding.PostItemViewBinding
 
-class HomeScreenAdapter(
-    private val postList: List<Post>,
-    private val onPostClickListener: OnPostClickListener
-) :
+
+class HomeScreenAdapter(private val postList: List<Post>, private val onPostClickListener: OnPostClickListener) :
     RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     private var postClickListener: OnPostClickListener? = null
@@ -24,6 +22,7 @@ class HomeScreenAdapter(
     init {
         postClickListener = onPostClickListener
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         val itemBinding =
@@ -112,7 +111,6 @@ class HomeScreenAdapter(
             binding.likeBtn.setOnClickListener {
                 if(post.liked) post.apply { liked = false } else post.apply { liked = true }
                 tintHeartIcon(post)
-                postClickListener?.onLikeButtonClick(post, post.liked)
             }
 
         }

@@ -25,15 +25,10 @@ class CameraDataSource {
             it.displayName?.let { displayName ->
                 FirebaseFirestore.getInstance().collection("posts").add(
                     Post(
-                        poster = Poster(
-                            username = displayName,
-                            uid = user.uid,
-                            profile_picture = it.photoUrl.toString()
-                        ),
-                        likes = 0
-                    )
-                )
-
+                        poster = Poster(username = displayName, uid = user.uid, profile_picture = it.photoUrl.toString()),
+                        post_image = downloadUrl,
+                        post_description = description,
+                        likes = 0))
             }
         }
 

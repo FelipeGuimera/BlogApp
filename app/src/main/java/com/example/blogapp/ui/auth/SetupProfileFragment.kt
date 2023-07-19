@@ -58,25 +58,23 @@ class SetupProfileFragment : Fragment(R.layout.fragment_setup_profile) {
                 AlertDialog.Builder(requireContext()).setTitle("Uploading photo...").create()
             bitmap?.let {
                 if (username.isNotEmpty()) {
-                    viewModel.updateUserProfile(imageBitmap = it, username = username)
-                        .observe(viewLifecycleOwner) { result ->
-                            when (result) {
-                                is com.example.blogapp.core.Result.Loading -> {
-                                    alertDialog.show()
-                                }
-                                is com.example.blogapp.core.Result.Success -> {
-                                    alertDialog.dismiss()
-                                    findNavController().navigate(R.id.action_setupProfileFragment_to_homeScreenFragment)
-                                }
-                                is com.example.blogapp.core.Result.Failure -> {
-                                    alertDialog.dismiss()
-                                }
+                    viewModel.updateUserProfile(imageBitmap = it, username = username).observe(viewLifecycleOwner) { result ->
+                        when (result) {
+                            is com.example.blogapp.core.Result.Loading -> {
+                                alertDialog.show()
+                            }
+                            is com.example.blogapp.core.Result.Success -> {
+                                alertDialog.dismiss()
+                                findNavController().navigate(R.id.action_setupProfileFragment_to_homeScreenFragment)
+                            }
+                            is com.example.blogapp.core.Result.Failure -> {
+                                alertDialog.dismiss()
                             }
                         }
+                    }
                 }
             }
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -14,26 +14,30 @@ import java.io.ByteArrayOutputStream
 
 class AuthDataSource {
 
-    suspend fun signIn(email:String, password: String): FirebaseUser?{
-        val authResult = FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
+    suspend fun signIn(email: String, password: String): FirebaseUser? {
+        val authResult =
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
         return authResult.user
     }
 
     suspend fun singUp(email: String, password: String, username: String): FirebaseUser? {
-        val authResult = FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).await()
+        val authResult =
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).await()
         authResult.user?.uid?.let { uid ->
-            FirebaseFirestore.getInstance().collection("users").document(uid).set(User(email, username, "FOTO_URL.PNG")).await()
+            FirebaseFirestore.getInstance().collection("users").document(uid)
+                .set(User(email, username)).await()
         }
 
         return authResult.user
     }
 
-    suspend fun updateUserProfile(imageBitmap: Bitmap, username: String){
+    suspend fun updateUserProfile(imageBitmap: Bitmap, username: String) {
         val user = FirebaseAuth.getInstance().currentUser
         val imageRef = FirebaseStorage.getInstance().reference.child("${user?.uid}/profile_picture")
         val baos = ByteArrayOutputStream()
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100,baos)
-        val downloadUrl = imageRef.putBytes(baos.toByteArray()).await().storage.downloadUrl.await().toString()
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val downloadUrl =
+            imageRef.putBytes(baos.toByteArray()).await().storage.downloadUrl.await().toString()
 
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(username)

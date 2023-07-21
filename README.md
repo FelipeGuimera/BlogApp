@@ -11,6 +11,7 @@ BlogApp, es una aplicación que permite a los usuarios compartir sus experiencia
 - Firebase
 - Fragments
 - Glide
+- Flow
 - Navigation Component
 - Coroutines
 - ViewModel & LiveData
